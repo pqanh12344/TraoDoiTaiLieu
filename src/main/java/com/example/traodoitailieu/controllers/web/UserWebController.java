@@ -9,6 +9,7 @@ import com.example.traodoitailieu.services.impl.DocumentService;
 import com.example.traodoitailieu.services.impl.UserDocumentService;
 import com.example.traodoitailieu.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -154,13 +155,13 @@ public class UserWebController {
 
     @GetMapping("/show-document")
     public String ShowDocument(Model model, HttpServletRequest request, @RequestParam("id") int id) {
+        ArrayList<Category> list = categoryService.getAll();
         String m  = "", n = "", k = "", h = "";
         UserDocument a = userDocumentService.getById(id);
         ArrayList<User> b = userService.getAll();
         for (User item1 : b) {
             if(item1.getUser_id() == a.getUser_id()){
                 k += item1.getEmail();
-                m += item1.getName();
                 break;
             }
         }
@@ -172,12 +173,18 @@ public class UserWebController {
                 break;
             }
         }
-        model.addAttribute("name", m);
+
+        for (Category item : list) {
+            if(item.getCategory_id() == a.getCategory_id()){
+                m += item.getCategory_name();
+                break;
+            }
+        }
+        model.addAttribute("cate_name", m);
         model.addAttribute("doc", n);
         model.addAttribute("email", k);
         model.addAttribute("description", h);
         int checkCookie = 0;
-        ArrayList<Category> list = categoryService.getAll();
         model.addAttribute("list_category", list);
         boolean check = false;
         Cookie[] cookies = request.getCookies();
@@ -199,5 +206,30 @@ public class UserWebController {
             }
         }
         return "web/user/show-document";
+    }
+
+    /*@GetMapping("/edit-document")
+    public String Edit(Model model, @RequestParam("id") int id){
+        return "web/user/edit-document";
+    }
+
+    @PostMapping("/do-edit-document")
+    public String doEdit(Model model, HttpServletRequest request, @RequestParam("id") int id){
+        String name = request.getParameter("document_name");
+        String description = request.getParameter("description");
+        UserDocument userDocument = userDocumentService.getById(id);
+        ArrayList<Document> a = new ArrayList<>();
+        for (Document it: a) {
+            if(it.getDocument_id() == userDocument.getDocument_id()){
+                model.addAttribute("name1234", it.getDocument_name());
+                break;
+            }
+        }
+    }
+*/
+    @GetMapping("/delete-document")
+    public String delete(@RequestParam("id") int id){
+        documentService.deleteById(id);
+        return "redirect:/my-page";
     }
 }
