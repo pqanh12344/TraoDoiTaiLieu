@@ -1,0 +1,11 @@
+{
+  "web":{
+    "client_id":"894784526742-rl28f2cge8ht8t2i8q90mgtlshhh1if5.apps.googleusercontent.com",
+    "project_id":"traodoitailieu","auth_uri":"https://accounts.google.com/o/oauth2/auth",
+      "token_uri":"https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+      "client_secret":"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",
+      "redirect_uris":["http://localhost:8081/Callback"],
+      "javascript_origins":["http://localhost:8081"]
+  }
+}
