@@ -110,7 +110,42 @@ public class ExchangeController {
         Date b = cal.getTime();
         comment.setUpdated_up(b);
         commentService.saveComment(comment);
-        return "redirect:/exchange";
+        return "redirect:/doReply?id=" + id;
+    }
+
+    @GetMapping("/doReply")
+    public String doReplyGet(Model model, Comment comment, Post post, HttpServletRequest request, @RequestParam("id") int id){
+        Post posttl = postService.getById(id);
+        model.addAttribute("item", posttl);
+        int checkCookie = 0;
+        ArrayList<Category> list = categoryService.getAll();
+        model.addAttribute("list_category", list);
+        ArrayList<Post> listPost = postService.getAll();
+        model.addAttribute("list_post", listPost);
+        ArrayList<User> listUser = userService.getAll();
+        model.addAttribute("list_user", listUser);
+        ArrayList<Comment> listComment = commentService.getAll();
+        model.addAttribute("list_comment", listComment);
+        boolean check = false;
+        Cookie[] cookies = request.getCookies();
+        String cookieName = "user_id";
+        if(cookies == null){
+            return "web/comment/reply";
+        }else{
+            for (int i = 0; i < cookies.length; i++) {
+                Cookie cookie = cookies[i];
+                if(cookie.getName().equals(cookieName)){
+                    check = true;
+                    break;
+                }
+            }
+            if(check == true){
+                checkCookie = 1;
+                model.addAttribute("checkCookie", checkCookie);
+                return "web/comment/reply";
+            }
+        }
+        return "web/comment/reply";
     }
 
     @PostMapping("/do-reply")

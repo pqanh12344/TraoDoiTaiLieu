@@ -7,14 +7,77 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Information</title>
+    <style>
+    .tabletl{
+        background-color: white;
+        border: 3px solid grey;
+        box-shadow: 0 0 5px 2px grey;
+        height: auto;
+        line-height: 100px;
+        text-align: center;
+        width: 83%;
+        margin-top: 30px;
+        margin-left: 100px;
+    }
+    </style>
 </head>
 <body>
 <div layout:fragment="main-content">
-    <div style="width: 100%; height: 1000px; background-color: forestgreen; padding-top: 230px">
+    <div style="width: 20%; height: 700px; background-color: PowderBlue; padding-top: 50px; float: left">
+        <!--<a href="#">
+            <button style="width: 100%; height: 50px; background-color: Gray; margin-top: 27px;">
+                My Page
+            </button>
+        </a>-->
+    </div>
+    <div style="width: 80%; height: auto; background-color: white; padding-top: 70px; float:left">
+        <div class="tabletl" th:object="${user}">
+            <div style="background-color: Green; width: 100%; height: 70px;">
+                <span style="margin-bottom: 40px; ">Thông tin chi tiết</span>
+            </div>
+            <div>
+                <label style="float: left; margin-left: 30px;">Tên:</label>
+                <div style="float: left; margin-left: 50px;" th:text="*{name}"></div>
+            </div>
+            <div style="clear: left"></div>
+            <div>
+                <label style="float: left; margin-left: 30px;">Email:</label>
+                <div style="float: left; margin-left: 50px;" th:text="*{email}"></div>
+            </div>
+            <div style="clear: left"></div>
+            <div>
+                <label style="float: left; margin-left: 30px;">User Name:</label>
+                <div style="float: left; margin-left: 50px;" th:text="*{user_name}"></div>
+            </div>
+            <div style="clear: left"></div>
+            <!--<div>
+                <label style="float: left; margin-left: 30px;">Tên Tài liệu:</label>
+                <div style="float: left; margin-left: 50px;" th:text="${doc}"></div>
+            </div>
+            <div style="clear: left"></div>
+            <div>
+                <label style="float: left; margin-left: 30px;">Được đăng bởi:</label>
+                <div style="float: left; margin-left: 50px;" th:text="${name}"></div>
+            </div>
+            <div style="clear: left"></div>
+            <div>
+                <label style="float: left; margin-left: 30px;">Mô tả tài liệu:</label>
+                <div style="float: left; margin-left: 50px;" th:text="${description}"></div>
+            </div>
+            <div style="clear: left"></div>
+            <div>
+                <div style="float: left; margin-left: 30px;">Liên hệ qua email <span th:text="${email}"></span> để được tải tài liệu</div>
+            </div>-->
+            <form th:action="@{/logout}">
+                <button style="width: 10%; height: 100px; background-color: red; ">Logout</button>
+            </form>
+        </div>
+    </div>
+    <!--<div style="width: 100%; height: 1000px; background-color: forestgreen; padding-top: 230px">
         <form th:action="@{/logout}">
             <button style="width: 10%; height: 100px; background-color: red; ">Logout</button>
         </form>
-    </div>
+    </div>-->
 </div>
 </body>
 </html>

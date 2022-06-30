@@ -83,6 +83,7 @@ public class UserWebController {
     @GetMapping("/user_information")
     public String information(Model model, HttpServletRequest request) {
         int checkCookie = 0;
+        int user_id = 0;
         boolean check = true;
         Cookie[] cookies = request.getCookies();
         String cookieName = "user_id";
@@ -92,6 +93,7 @@ public class UserWebController {
             for (int i = 0; i < cookies.length; i++) {
                 Cookie cookie = cookies[i];
                 if(cookie.getName().equals(cookieName)){
+                    user_id = Integer.parseInt(cookie.getValue());
                     check = true;
                     break;
                 }
@@ -99,6 +101,7 @@ public class UserWebController {
             if(check == true){
                 checkCookie = 1;
                 model.addAttribute("checkCookie", checkCookie);
+                model.addAttribute("user", userService.getById(user_id));
                 return "web/user/information";
             }
         }

@@ -1,6 +1,7 @@
 /*
 package com.example.traodoitailieu.config;
 
+import com.example.traodoitailieu.services.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -17,33 +17,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    UserDetailService userDetailService;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailService);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/home").permitAll()
-                .antMatchers("/").hasRole("MEMBER")
-                .antMatchers("/admin").hasRole("ADMIN")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .usernameParameter("email")
+        http.authorizeRequests().antMatchers("/*").permitAll();
+        http.authorizeRequests().antMatchers("/admin/user").access("hasRole('ROLE_USER', 'ROLE_ADMIN')")
+                .and().formLogin().loginPage("/login")
+                .usernameParameter("user_name")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/")
-                .failureUrl("/login?error")
-                .and()
-                .exceptionHandling();
+                .defaultSuccessUrl("/home")
+                .failureUrl("/login?error");
     }
-}*/
+}
+*/
