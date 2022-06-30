@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.print.Doc;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -82,9 +83,11 @@ public class UserWebController {
 
     @GetMapping("/user_information")
     public String information(Model model, HttpServletRequest request) {
+        ArrayList<Category> list = categoryService.getAll();
+        model.addAttribute("list_category", list);
         int checkCookie = 0;
         int user_id = 0;
-        boolean check = true;
+        boolean check = false;
         Cookie[] cookies = request.getCookies();
         String cookieName = "user_id";
         if(cookies == null){
@@ -160,6 +163,8 @@ public class UserWebController {
     public String ShowDocument(Model model, HttpServletRequest request, @RequestParam("id") int id) {
         ArrayList<Category> list = categoryService.getAll();
         String m  = "", n = "", k = "", h = "";
+        int document_id = 0;
+        Document g = new Document();
         UserDocument a = userDocumentService.getById(id);
         ArrayList<User> b = userService.getAll();
         for (User item1 : b) {
@@ -173,6 +178,7 @@ public class UserWebController {
             if(item.getDocument_id() == a.getDocument_id()){
                 n += item.getDocument_name();
                 h += item.getDescription();
+                g = item;
                 break;
             }
         }
@@ -187,6 +193,7 @@ public class UserWebController {
         model.addAttribute("doc", n);
         model.addAttribute("email", k);
         model.addAttribute("description", h);
+        model.addAttribute("document", g);
         int checkCookie = 0;
         model.addAttribute("list_category", list);
         boolean check = false;
@@ -234,5 +241,116 @@ public class UserWebController {
     public String delete(@RequestParam("id") int id){
         documentService.deleteById(id);
         return "redirect:/my-page";
+    }
+
+    @GetMapping("/edit-user")
+    public String editUser(Model model, @RequestParam("id") int id, HttpServletRequest request){
+        model.addAttribute("obj", userService.getById(id));
+        ArrayList<Category> list = categoryService.getAll();
+        model.addAttribute("list_category", list);
+        int checkCookie = 0;
+        int user_id = 0;
+        boolean check = false;
+        Cookie[] cookies = request.getCookies();
+        String cookieName = "user_id";
+        if(cookies == null){
+            return null;
+        }else{
+            for (int i = 0; i < cookies.length; i++) {
+                Cookie cookie = cookies[i];
+                if(cookie.getName().equals(cookieName)){
+                    user_id = Integer.parseInt(cookie.getValue());
+                    check = true;
+                    break;
+                }
+            }
+            if(check == true){
+                checkCookie = 1;
+                model.addAttribute("checkCookie", checkCookie);
+                model.addAttribute("user", userService.getById(user_id));
+                return "web/user/edit-user";
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("/do-edit-user")
+    public String doEdit(User user, @RequestParam("id") int id){
+        user.setPassword(userService.getById(id).getPassword());
+        userService.saveUser(user);
+        return "redirect:/user_information";
+    }
+
+    @GetMapping("/doi-pass")
+    public String doiPass(Model model, @RequestParam("id") int id, HttpServletRequest request){
+        model.addAttribute("k1", null);
+        model.addAttribute("obj", userService.getById(id));
+        ArrayList<Category> list = categoryService.getAll();
+        model.addAttribute("list_category", list);
+        int checkCookie = 0;
+        int user_id = 0;
+        boolean check = false;
+        Cookie[] cookies = request.getCookies();
+        String cookieName = "user_id";
+        if(cookies == null){
+            return null;
+        }else{
+            for (int i = 0; i < cookies.length; i++) {
+                Cookie cookie = cookies[i];
+                if(cookie.getName().equals(cookieName)){
+                    user_id = Integer.parseInt(cookie.getValue());
+                    check = true;
+                    break;
+                }
+            }
+            if(check == true){
+                checkCookie = 1;
+                model.addAttribute("checkCookie", checkCookie);
+                model.addAttribute("user", userService.getById(user_id));
+                return "web/user/doi-pass";
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("/do-doi-pass")
+    public String doDoiPass(@RequestParam("id") int id, HttpServletRequest request, Model model){
+        String a = request.getParameter("password1");
+        String b = request.getParameter("password2");
+        User user = userService.getById(id);
+        if(!a.equals(user.getPassword())){
+            model.addAttribute("k1", "Nhập sai Password");
+            model.addAttribute("obj", userService.getById(id));
+            ArrayList<Category> list = categoryService.getAll();
+            model.addAttribute("list_category", list);
+            int checkCookie = 0;
+            int user_id = 0;
+            boolean check = false;
+            Cookie[] cookies = request.getCookies();
+            String cookieName = "user_id";
+            if(cookies == null){
+                return null;
+            }else{
+                for (int i = 0; i < cookies.length; i++) {
+                    Cookie cookie = cookies[i];
+                    if(cookie.getName().equals(cookieName)){
+                        user_id = Integer.parseInt(cookie.getValue());
+                        check = true;
+                        break;
+                    }
+                }
+                if(check == true){
+                    checkCookie = 1;
+                    model.addAttribute("checkCookie", checkCookie);
+                    model.addAttribute("user", userService.getById(user_id));
+                    return "web/user/doi-pass";
+                }
+            }
+            return null;
+        }else{
+            user.setPassword(b);
+            userService.saveUser(user);
+            return "redirect:/user_information";
+        }
     }
 }

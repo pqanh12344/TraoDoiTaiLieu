@@ -26,7 +26,7 @@
         <tbody>
         <tr th:each="doc:${docs}">
             <td th:text="${doc.getDocument_id()}" />
-            <td th:text="${doc.getDoc_name()}"/>
+            <td th:text="${doc.getDocument_name()}"/>
             <td><a th:href="@{/downloadFile?(id=${doc.document_id})}" target="_blank">Download</a></td>
         </tr>
         </tbody>

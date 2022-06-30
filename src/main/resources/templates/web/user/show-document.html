@@ -53,7 +53,17 @@
                 <label style="float: left; margin-left: 30px;">Mô tả tài liệu:</label>
                 <div style="float: left; margin-left: 50px;" th:text="${description}"></div>
             </div>
-            <div style="clear: left"></div>>
+            <div style="clear: left"></div>
+            <div th:object="${document}">
+                <div style="float: left; margin-left: 30px;">
+                    <span th:if="${document.getLink() == null }">
+                        <a th:href="@{/downloadFile(id=${document.getDocument_id()})}" type="button" class="btn btn-success" style="margin-right: 0px; margin-top: 0px;" target="_blank">Download</a>
+                    </span>
+                    <span th:if="${document.getLink() != null}">
+                        <a th:href="${document.getLink()}" type="button" class="btn btn-success" style="margin-right: 0px; margin-top: 0px;" target="_blank">Download</a>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

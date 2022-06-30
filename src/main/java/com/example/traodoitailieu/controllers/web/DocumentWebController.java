@@ -9,6 +9,7 @@ import com.example.traodoitailieu.services.impl.DocumentService;
 import com.example.traodoitailieu.services.impl.UserDocumentService;
 import com.example.traodoitailieu.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -253,19 +255,22 @@ public class DocumentWebController {
     public String uploadFile(@RequestParam("files") MultipartFile files) {
         documentService.saveFile(files);
         return "redirect:/listDoc";
-    }
+    }*/
 
     @GetMapping("/downloadFile")
-    public void downloadFile(@Param("id") int id, HttpServletResponse response) throws IOException {
+    public void downloadFile(@RequestParam("id") int id, HttpServletResponse response) throws IOException {
         Document doc = documentService.getFileById(id);
         response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=" + doc.getDoc_name();
+        String k = doc.getDocument_type();
+        String m = "";
+        m += String.valueOf(k.charAt(k.length()-3)) + String.valueOf(k.charAt(k.length()-2)) + String.valueOf(k.charAt(k.length()-1));
+        String headerValue = "attachment; filename=" + doc.getDocument_name() + "." + m;
         response.setHeader(headerKey, headerValue);
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(doc.getData());
         outputStream.close();
-    }*/
+    }
 
     @GetMapping("/search")
     public String Search(Model model, @RequestParam("search") String name, HttpServletRequest request){
@@ -343,6 +348,7 @@ public class DocumentWebController {
     @GetMapping("/detail")
     public String Detail(Model model, HttpServletRequest request, @RequestParam("id") int id) {
         String m  = "", n = "", k = "", h = "";
+        Document g = new Document();
         UserDocument a = userDocumentService.getById(id);
         ArrayList<User> b = userService.getAll();
         for (User item1 : b) {
@@ -357,6 +363,7 @@ public class DocumentWebController {
             if(item.getDocument_id() == a.getDocument_id()){
                 n += item.getDocument_name();
                 h += item.getDescription();
+                g = item;
                 break;
             }
         }
@@ -364,6 +371,7 @@ public class DocumentWebController {
         model.addAttribute("doc", n);
         model.addAttribute("email", k);
         model.addAttribute("description", h);
+        model.addAttribute("document", g);
         int checkCookie = 0;
         ArrayList<Category> list = categoryService.getAll();
         model.addAttribute("list_category", list);

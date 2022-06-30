@@ -27,6 +27,7 @@ public class DocumentService implements IDocumentService {
             doc.setDocument_type(file.getContentType());
             doc.setData(file.getBytes());
             doc.setLink(null);
+            doc.setDocName(docname);
             documentRepo.save(doc);
         } catch (Exception e) {
             e.printStackTrace();

@@ -27,4 +27,14 @@ public class Document {
 
     @Column(name = "link")
     String link;
+
+    private String docName;
+
+    public String getDocName() {
+        return docName;
+    }
+
+    public void setDocName(String docName) {
+        this.docName = docName;
+    }
 }
