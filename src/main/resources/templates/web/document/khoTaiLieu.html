@@ -50,6 +50,12 @@
       </div>
     </div>-->
 
+    <div th:each="item1: ${list_category}" style="margin-left: 100px;">
+      <div th:if="${item1.getCategory_id() == cate_id}">
+        <h3 th:text="${item1.getCategory_name()}"></h3>
+      </div>
+    </div>
+
     <div class="tabletl">
       <div style="margin-top: 30px;"></div>
       <div th:each="userDoc: ${listUserDoc}">

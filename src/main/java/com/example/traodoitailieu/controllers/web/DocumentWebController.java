@@ -62,6 +62,7 @@ public class DocumentWebController {
             }
         }
         model.addAttribute("listUserDoc", listUserDoc);
+        model.addAttribute("cate_id", Integer.parseInt(as));
         int checkCookie = 0;
         ArrayList<Category> list = categoryService.getAll();
         model.addAttribute("list_category", list);

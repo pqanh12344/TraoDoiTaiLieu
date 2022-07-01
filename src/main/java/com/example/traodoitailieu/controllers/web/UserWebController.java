@@ -239,7 +239,7 @@ public class UserWebController {
 */
     @GetMapping("/delete-document")
     public String delete(@RequestParam("id") int id){
-        documentService.deleteById(id);
+        documentService.deleteById(userDocumentService.getById(id).getDocument_id());
         return "redirect:/my-page";
     }
 

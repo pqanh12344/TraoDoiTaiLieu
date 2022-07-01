@@ -44,7 +44,11 @@ public class ExchangeController {
         ArrayList<Category> list = categoryService.getAll();
         model.addAttribute("list_category", list);
         ArrayList<Post> listPost = postService.getAll();
-        model.addAttribute("list_post", listPost);
+        ArrayList<Post> listPost12 = new ArrayList<>();
+        for (int i = listPost.size()-1; i >= 0; i--){
+            listPost12.add(listPost.get(i));
+        }
+        model.addAttribute("list_post", listPost12);
         ArrayList<User> listUser = userService.getAll();
         model.addAttribute("list_user", listUser);
         ArrayList<Comment> listComment = commentService.getAll();
@@ -125,7 +129,11 @@ public class ExchangeController {
         ArrayList<User> listUser = userService.getAll();
         model.addAttribute("list_user", listUser);
         ArrayList<Comment> listComment = commentService.getAll();
-        model.addAttribute("list_comment", listComment);
+        ArrayList<Comment> listComment12 = new ArrayList<>();
+        for (int i = listComment.size()-1; i >= 0; i--){
+            listComment12.add(listComment.get(i));
+        }
+        model.addAttribute("list_comment", listComment12);
         boolean check = false;
         Cookie[] cookies = request.getCookies();
         String cookieName = "user_id";
@@ -160,7 +168,11 @@ public class ExchangeController {
         ArrayList<User> listUser = userService.getAll();
         model.addAttribute("list_user", listUser);
         ArrayList<Comment> listComment = commentService.getAll();
-        model.addAttribute("list_comment", listComment);
+        ArrayList<Comment> listComment12 = new ArrayList<>();
+        for (int i = listComment.size()-1; i >= 0; i--){
+            listComment12.add(listComment.get(i));
+        }
+        model.addAttribute("list_comment", listComment12);
         boolean check = false;
         Cookie[] cookies = request.getCookies();
         String cookieName = "user_id";
