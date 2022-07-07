@@ -180,6 +180,7 @@ public class DocumentWebController {
         boolean check = false;
         Cookie[] cookies = request.getCookies();
         String cookieName = "user_id";
+
         if(cookies == null){
             return "web/document/upl";
         }else{
